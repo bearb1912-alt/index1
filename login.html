@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Đăng nhập nước hoa</title>
+<style>
+  /* Reset cơ bản */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body, html {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('https://kimthuylo.com/wp-content/uploads/2024/11/img_1737686324195_1737686328584.jpg') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Khung đăng nhập */
+  .login-container {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    width: 320px;
+    animation: fadeInScale 0.7s ease forwards;
+  }
+
+  @keyframes fadeInScale {
+    0% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .login-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 24px;
+    font-weight: 700;
+  }
+
+  /* Form */
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    outline: none;
+    border-color: #b76e79; /* màu hồng nhẹ */
+    box-shadow: 0 0 8px rgba(183, 110, 121, 0.6);
+  }
+
+  button {
+    padding: 12px;
+    background: #b76e79;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  button:hover {
+    background: #9a5961;
+  }
+
+  /* Thông báo lỗi */
+  .error-message {
+    color: #d9534f;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>Đăng nhập nước hoa</h2>
+  <div id="error" class="error-message"></div>
+  <form id="loginForm">
+    <label for="username">Tên đăng nhập</label>
+    <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required />
+    
+    <label for="password">Mật khẩu</label>
+    <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required />
+    
+    <button type="submit">Đăng nhập</button>
+  </form>
+</div>
+
+<script>
+  // Tài khoản mẫu
+  const validUser = {
+    username: 'admin',
+    password: '123456'
+  };
+
+  const form = document.getElementById('loginForm');
+  const errorDiv = document.getElementById('error');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const usernameInput = form.username.value.trim();
+    const passwordInput = form.password.value;
+
+    if (usernameInput === validUser.username && passwordInput === validUser.password) {
+      // Đăng nhập thành công, chuyển đến nuochoa.html
+      window.location.href = 'nuochoa.html';
+    } else {
+      // Hiện thông báo lỗi
+      errorDiv.textContent = 'Tên đăng nhập hoặc mật khẩu không đúng!';
+      // Animation lỗi nhẹ
+      errorDiv.style.animation = 'shake 0.3s ease';
+      errorDiv.addEventListener('animationend', () => {
+        errorDiv.style.animation = '';
+      });
+    }
+  });
+
+</script>
+
+<style>
+  /* animation rung cho lỗi */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
+  }
+</style>
+
+</body>
+</html>
