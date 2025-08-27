@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfume World - Nước Hoa Đẳng Cấp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #fdf0f3, #ffe3e3);
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(90deg, #ff5e78, #ff99ac);
+      padding: 30px 20px;
+      text-align: center;
+      color: white;
+      animation: fadeInDown 1s ease-in-out;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3em;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 1.2em;
+    }
+
+    nav {
+      background-color: #ff3366;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 15px;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffe3e3;
+    }
+
+    .banner {
+      background-image: url('https://images.unsplash.com/photo-1587019159113-eee8d0e918b1');
+      background-size: cover;
+      background-position: center;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 8px #000;
+      font-size: 2.8em;
+      font-weight: bold;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .section {
+      padding: 60px 20px;
+      animation: fadeInUp 1s ease-in-out;
+    }
+
+    .section h2 {
+      text-align: center;
+      color: #c71585;
+      margin-bottom: 30px;
+      font-family: 'Playfair Display', serif;
+      font-size: 2em;
+    }
+
+    .about {
+      text-align: center;
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.6;
+      font-size: 1.1em;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    .product-card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .reviews {
+      background-color: #ffe4e1;
+      border-radius: 20px;
+      padding: 40px 30px;
+    }
+
+    .review {
+      font-style: italic;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .contact {
+      background-color: #fff0f5;
+      border-radius: 20px;
+      padding: 40px 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: space-between;
+    }
+
+    .contact-info {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .contact-info h3 {
+      color: #c71585;
+    }
+
+    .contact-info p {
+      margin: 10px 0;
+    }
+
+    .contact-info i {
+      color: #ff1493;
+      margin-right: 10px;
+    }
+
+    .map {
+      flex: 1;
+      min-width: 300px;
+      height: 300px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    }
+
+    footer {
+      background-color: #db7093;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      animation: fadeInUp 1s ease-in-out;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes fadeInDown {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Perfume World</h1>
+    <p>Khám phá thế giới nước hoa cao cấp</p>
+	<div style="position: fixed; top: 15px; right: 20px; z-index: 1001;">
+  <button id="cart-btn" style="background-color: #ff3366; color: white; border: none; padding: 10px 15px; border-radius: 30px; font-weight: bold; cursor: pointer;">
+    💵 Giỏ hàng (<span id="cart-count">0</span>) | <span id="cart-total">0₫</span>
+  </button>
+</div>
+  </header>
+
+  <nav>
+    <a href="#about">Giới thiệu</a>
+    <a href="#products">Sản phẩm</a>
+    <a href="#reviews">Đánh giá</a>
+    <a href="#contact">Liên hệ</a>
+  </nav>
+
+  <div class="banner">
+    ✨ Hương thơm – Đẳng cấp – Quyến rũ ✨
+  </div>
+
+  <section id="about" class="section">
+    <h2>Về chúng tôi</h2>
+    <div class="about">
+      <p>Perfume World là điểm đến của những tín đồ đam mê mùi hương cao cấp. Từ sự cổ điển của Pháp đến sự quyến rũ phương Đông, chúng tôi mang đến trải nghiệm đẳng cấp và khác biệt cho khách hàng sành điệu nhất.</p>
+    </div>
+  </section>
+
+  <section id="products" class="section">
+    <h2>Sản phẩm nổi bật</h2>
+  <div class="products">
+  <a href="chanel.html" style="text-decoration: none; color: inherit;">
+    <div class="product-card">
+      <img src="https://images.unsplash.com/photo-1609178016676-dfbdbdeaddbb?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGNoYW5lbCUyMG5vLjV8ZW58MHx8MHx8fDA%3D" alt="Chanel No.5">
+      <h3>Chanel No.5</h3>
+      <p>Hương thơm cổ điển, tinh tế, đậm chất Paris.</p>
+	  <p class="price">Giá: 2.800.000₫</p>
+      <button class="add-to-cart" data-name="Chanel No.5" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+      </div>
+    </a>
+  </div>
+
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1700473170883-47612d466783?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZGlvciUyMHNhdXZhZ2V8ZW58MHx8MHx8fDA%3D" alt="Dior Sauvage">
+    <h3>Dior Sauvage</h3>
+    <p>Sự nam tính, mạnh mẽ và hiện đại.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Dior Sauvage" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://nacosofficial.com/cdn/shop/files/gucci-women-s-perfume-gucci-bloom-eau-de-parfum-women-s-perfume-spray-30ml-50ml-100ml-36397336854687_large_841d8abd-40fc-4dc2-9331-7bafdf3aac00.png?v=1743059643&width=1445" alt="Gucci Bloom">
+    <h3>Gucci Bloom</h3>
+    <p>Mùi hương hoa nhẹ nhàng, nữ tính và quyến rũ.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Gucci Bloom" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://www.shutterstock.com/image-photo/kuala-lumpur-malaysia-august-1st-600nw-2033038973.jpg" alt="YSL Black Opium">
+    <h3>YSL Black Opium</h3>
+    <p>Mùi hương ngọt ngào và quyến rũ dành cho phái đẹp.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="YSL Black Opium" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://images.brownthomas.com/bta/2001148054_04.jpg?$pdp_zoom$" alt="Tom Ford Oud Wood">
+    <h3>Tom Ford Oud Wood</h3>
+    <p>Mạnh mẽ, huyền bí với hương gỗ trầm sang trọng.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Tom Ford Oud Wood" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://live.staticflickr.com/3932/15287096558_8a96eac20b_b.jpg" alt="Versace Eros">
+    <h3>Versace Eros</h3>
+    <p>Sự bùng nổ của nam tính, năng động và nhiệt huyết.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Versace Eros" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://theperfume.vn/wp-content/uploads/2021/08/J-o-Malo-ne-Pe-ony-Blu-sh-Su-ede-for-women-30ml.png" alt="Jo Malone Peony & Blush Suede">
+    <h3>Jo Malone Peony & Blush Suede</h3>
+    <p>Nhẹ nhàng, tươi mới với hương hoa mẫu đơn và táo đỏ.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Jo Malone Peony & Blush Suede" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://i.pinimg.com/736x/5d/d7/2a/5dd72a542fc5a1ca501f26518e3a67dd.jpg" alt="Creed Aventus">
+    <h3>Creed Aventus</h3>
+    <p>Mùi hương đỉnh cao của sự thành công và quyền lực.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Creed Aventus" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1708979165880-dd0ff61fa748?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Z2lvcmdpbyUyMGFybWFuaXxlbnwwfHwwfHx8MA%3D%3D" alt="Giorgio Armani Si">
+    <h3>Giorgio Armani Sí</h3>
+    <p>Ngọt ngào, nữ tính và đầy đam mê.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Giorgio Armani Sí" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://yoy.vn/images/product/product-1639883828-nuoc-hoa-lancome-la-vie-est-belle-edp-75ml-1.jpg" alt="Lancome La Vie Est Belle">
+    <h3>Lancome La Vie Est Belle</h3>
+    <p>Cuộc sống tươi đẹp với hương vani ngọt ngào và nữ tính.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Lancome La Vie Est Belle" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://www.burmunk.am/media/1200x1200/2021/328/le-male-edp.jpg" alt="Jean Paul Gaultier Le Male">
+    <h3>Jean Paul Gaultier Le Male</h3>
+    <p>Hương thơm đặc trưng, quyến rũ cho nam giới.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Jean Paul Gaultier Le Male" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://cdn.vuahanghieu.com/unsafe/0x900/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/product/2022/10/nuoc-hoa-unisex-byredo-gypsy-water-100ml-63466f8810a7c-12102022144056.jpg" alt="Byredo Gypsy Water">
+    <h3>Byredo Gypsy Water</h3>
+    <p>Thơ mộng, tự do với sự kết hợp của gỗ, trầm và hổ phách.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Byredo Gypsy Water" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1676349006826-ef0df629c4ea?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE1fHx8ZW58MHx8fHx8" alt="Maison Francis Kurkdjian Baccarat Rouge 540">
+    <h3>Baccarat Rouge 540</h3>
+    <p>Độc đáo, sang trọng và rất khó quên.</p>
+	<p class="price">Giá: 2.800.000₫</p>
+    <button class="add-to-cart" data-name="Baccarat Rouge 540" data-price="2800000">💵 Thêm vào giỏ hàng</button>
+  </div>
+</div>
+  </section>
+
+  <section id="reviews" class="section reviews">
+    <h2>Phản Hồi Của Khách</h2>
+    <div class="review">🌟 "Tôi đã thử rất nhiều loại nước hoa, nhưng ở đây là nơi tôi tìm thấy mùi hương đích thực của mình." – <strong>Gia Bảo</strong></div>
+    <div class="review">🌟 "Chất lượng sản phẩm và dịch vụ tuyệt vời! Giao hàng siêu nhanh." – <strong>Khang Highlight</strong></div>
+    <div class="review">🌟 "Mùi thơm cực kỳ sang trọng, giá cả hợp lý, đóng gói đẹp." – <strong>Tuấn Hay Nói</strong></div>
+  </section>
+
+  <section id="contact" class="section contact">
+    <div class="contact-info">
+      <h3>Liên hệ với chúng tôi</h3>
+      <p><i class="fas fa-map-marker-alt"></i>123 Đường Hương Thơm, Phường 5, Quận 3, TP.HCM</p>
+      <p><i class="fas fa-phone"></i>Hotline: 090300khongbiet</p>
+      <p><i class="fas fa-envelope"></i>Email: nuochoa@gmail.com</p>
+      <p><i class="fas fa-globe"></i>Website: <a href="#">www.perfumeworld.vn</a></p>
+    </div>
+    <div class="map">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.420431712972!2d106.69094427481833!3d10.777349359152073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f24b70b7a4d%3A0x1bd96cb3d0db8f41!2zMTIzIMSQxrDhu51uZyBIxrBuZyBUaOG7mW0sIFBoxrDhu51uZyA1LCBRdeG6rW4gMywgSOG7kyBDaMOtbmggTWluaCwgVFAuIEjDoCBDaMOtbmg!5e0!3m2!1svi!2s!4v1693992635156!5m2!1svi!2s" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Perfume World. Designed with ❤️ by Perfume Studio.
+  </footer>
+
+  <!-- Font Awesome CDN -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+ <script>
+  let cartCount = 0;
+  let cartTotal = 0;
+
+  const cartCountElement = document.getElementById("cart-count");
+
+  // Tạo popup hoặc hiển thị chi tiết sau này nếu cần
+  const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+  addToCartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const price = parseInt(button.getAttribute('data-price'));
+      cartCount++;
+      cartTotal += price;
+
+      // Cập nhật giao diện
+      cartCountElement.innerText = cartCount;
+
+      // Hiển thị alert hoặc tạo bảng sau này
+      alert(`Đã thêm sản phẩm vào giỏ!\nTổng số lượng: ${cartCount}\nTổng tiền: ${cartTotal.toLocaleString('vi-VN')}₫`);
+    });
+  });
+</script>
+</html>
