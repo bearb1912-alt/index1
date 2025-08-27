@@ -367,9 +367,9 @@
   <section id="contact" class="section contact">
     <div class="contact-info">
       <h3>Liên hệ với chúng tôi</h3>
-      <p><i class="fas fa-map-marker-alt"></i>TCVN Bến Lức, Long An</p>
-      <p><i class="fas fa-phone"></i>Hotline: 0xxxxxxxxx</p>
-      <p><i class="fas fa-envelope"></i>Email: tranthanhtuan@gmail.com</p>
+      <p><i class="fas fa-map-marker-alt"></i>123 Đường Hương Thơm, Phường 5, Quận 3, TP.HCM</p>
+      <p><i class="fas fa-phone"></i>Hotline: 090300khongbiet</p>
+      <p><i class="fas fa-envelope"></i>Email: nuochoa@gmail.com</p>
       <p><i class="fas fa-globe"></i>Website: <a href="#">www.perfumeworld.vn</a></p>
     </div>
     <div class="map">
@@ -383,29 +383,169 @@
 
   <!-- Font Awesome CDN -->
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <!-- Popup mini giỏ hàng -->
+<div id="cart-popup" style="display:none; position: fixed; bottom: 70px; right: 20px; width: 350px; background: white; box-shadow: 0 6px 15px rgba(0,0,0,0.2); border-radius: 12px; padding: 20px; z-index: 1002; font-family: 'Roboto', sans-serif;">
+  <h3 style="color:#c71585; margin-top: 0;">Giỏ hàng của bạn</h3>
+  <ul id="cart-popup-items" style="max-height: 200px; overflow-y: auto; margin: 0 0 15px 0; padding-left: 15px;"></ul>
+  <p style="font-weight: bold; text-align: right; margin: 10px 0;">Tổng: <span id="cart-popup-total">0₫</span></p>
+  
+  <form id="popup-checkout-form">
+    <input type="text" id="popup-customer-name" placeholder="Họ tên" style="width: 100%; padding: 8px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #ccc;" required>
+    <input type="tel" id="popup-customer-phone" placeholder="Số điện thoại" style="width: 100%; padding: 8px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #ccc;" required>
+    <input type="text" id="popup-customer-address" placeholder="Địa chỉ giao hàng" style="width: 100%; padding: 8px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc;" required>
+    <button type="submit" style="width: 100%; background-color: #ff3366; color: white; padding: 10px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer;">Đặt hàng ngay</button>
+  </form>
+  <button id="popup-close-btn" style="margin-top: 12px; background: transparent; border: none; color: #ff3366; cursor: pointer; width: 100%; font-weight: bold;">Đóng</button>
+</div>
 </body>
  <script>
-  let cartCount = 0;
-  let cartTotal = 0;
+ let cartItems = [];
+const cartBtn = document.getElementById("cart-btn");
+const cartPopup = document.getElementById("cart-popup");
+const cartPopupItems = document.getElementById("cart-popup-items");
+const cartPopupTotal = document.getElementById("cart-popup-total");
+const popupCloseBtn = document.getElementById("popup-close-btn");
+const popupCheckoutForm = document.getElementById("popup-checkout-form");
+const cartCountSpan = document.getElementById("cart-count");
+const cartTotalSpan = document.getElementById("cart-total");
 
-  const cartCountElement = document.getElementById("cart-count");
-
-  // Tạo popup hoặc hiển thị chi tiết sau này nếu cần
-  const addToCartButtons = document.querySelectorAll('.add-to-cart');
-
-  addToCartButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const price = parseInt(button.getAttribute('data-price'));
-      cartCount++;
-      cartTotal += price;
-
-      // Cập nhật giao diện
-      cartCountElement.innerText = cartCount;
-
-      // Hiển thị alert hoặc tạo bảng sau này
-      alert(`Đã thêm sản phẩm vào giỏ!\nTổng số lượng: ${cartCount}\nTổng tiền: ${cartTotal.toLocaleString('vi-VN')}₫`);
-    });
+// Hàm cập nhật tổng số lượng và tổng tiền trong giỏ hàng
+function updateCartSummary() {
+  let totalQuantity = 0;
+  let totalPrice = 0;
+  cartItems.forEach(item => {
+    totalQuantity += item.quantity;
+    totalPrice += item.price * item.quantity;
   });
-</script>
-</html>
+  cartCountSpan.textContent = totalQuantity;
+  cartTotalSpan.textContent = totalPrice.toLocaleString('vi-VN') + "₫";
+}
 
+// Hàm cập nhật nội dung popup giỏ hàng
+function updateCartPopup() {
+  cartPopupItems.innerHTML = '';
+  if (cartItems.length === 0) {
+    cartPopupItems.innerHTML = '<li>Giỏ hàng đang trống.</li>';
+  } else {
+    cartItems.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.style.marginBottom = "10px";
+      
+      // Tạo nút giảm số lượng
+      const btnDecrease = document.createElement('button');
+      btnDecrease.textContent = '-';
+      btnDecrease.style.marginRight = '10px';
+      btnDecrease.style.cursor = 'pointer';
+      btnDecrease.style.border = 'none';
+      btnDecrease.style.backgroundColor = '#ff5e78';
+      btnDecrease.style.color = 'white';
+      btnDecrease.style.borderRadius = '5px';
+      btnDecrease.style.padding = '2px 6px';
+      btnDecrease.addEventListener('click', () => {
+        if (item.quantity > 1) {
+          item.quantity--;
+        } else {
+          cartItems.splice(index, 1); // Xóa sản phẩm nếu số lượng là 1
+        }
+        updateCartPopup();
+        updateCartSummary();
+      });
+
+      // Tạo nội dung sản phẩm
+      const spanText = document.createElement('span');
+      spanText.textContent = `${item.name} (x${item.quantity}) - ${(item.price * item.quantity).toLocaleString('vi-VN')}₫`;
+      spanText.style.marginRight = '10px';
+
+      // Tạo nút xóa
+      const btnRemove = document.createElement('button');
+      btnRemove.textContent = 'X';
+      btnRemove.style.cursor = 'pointer';
+      btnRemove.style.border = 'none';
+      btnRemove.style.backgroundColor = 'transparent';
+      btnRemove.style.color = '#ff3366';
+      btnRemove.addEventListener('click', () => {
+        cartItems.splice(index, 1); // Xóa sản phẩm
+        updateCartPopup();
+        updateCartSummary();
+      });
+
+      li.appendChild(btnDecrease);
+      li.appendChild(spanText);
+      li.appendChild(btnRemove);
+
+      cartPopupItems.appendChild(li);
+    });
+  }
+  let totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  cartPopupTotal.textContent = totalPrice.toLocaleString('vi-VN') + "₫";
+}
+
+// Bắt sự kiện click nút giỏ hàng để hiện/ẩn popup
+cartBtn.addEventListener("click", () => {
+  if (cartPopup.style.display === "none" || cartPopup.style.display === "") {
+    updateCartPopup();
+    cartPopup.style.display = "block";
+  } else {
+    cartPopup.style.display = "none";
+  }
+});
+
+// Bắt sự kiện đóng popup
+popupCloseBtn.addEventListener("click", () => {
+  cartPopup.style.display = "none";
+});
+
+// Bắt sự kiện thêm sản phẩm vào giỏ
+document.querySelectorAll(".add-to-cart").forEach(button => {
+  button.addEventListener("click", () => {
+    const name = button.getAttribute("data-name");
+    const price = parseInt(button.getAttribute("data-price"));
+
+   // Kiểm tra sản phẩm đã có trong giỏ chưa
+const existingItem = cartItems.find(item => item.name === name);
+if (existingItem) {
+  existingItem.quantity++;
+} else {
+  cartItems.push({name, price, quantity: 1});
+}
+
+// Lưu vào localStorage
+localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    updateCartSummary();
+    updateCartPopup();
+    // Tự động mở popup khi thêm sản phẩm
+    cartPopup.style.display = "block";
+  });
+});
+
+// Xử lý form đặt hàng trong popup
+popupCheckoutForm.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  if (cartItems.length === 0) {
+    alert("Giỏ hàng đang trống. Vui lòng thêm sản phẩm.");
+    return;
+  }
+
+  const name = document.getElementById("popup-customer-name").value.trim();
+  const phone = document.getElementById("popup-customer-phone").value.trim();
+  const address = document.getElementById("popup-customer-address").value.trim();
+
+  if (!name || !phone || !address) {
+    alert("Vui lòng điền đầy đủ thông tin đặt hàng.");
+    return;
+  }
+
+  // Ở đây bạn có thể xử lý gửi đơn hàng lên server hoặc API
+
+  alert(`Cảm ơn ${name}! Đơn hàng của bạn đã được tiếp nhận và sẽ giao tới địa chỉ: ${address}`);
+
+  // Reset giỏ hàng và form
+  cartItems = [];
+  updateCartSummary();
+  updateCartPopup();
+  popupCheckoutForm.reset();
+  cartPopup.style.display = "none";
+});
+</script>
+</html> 
